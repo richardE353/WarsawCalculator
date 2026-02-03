@@ -14,29 +14,22 @@ struct ContentView: View {
     @State private var proteinGrams: Double = 0.0
     @State private var ICR: Double = 10.0
     
-    @State private var recommendedInsulin: Double = 0.0
-    @State private var digestionTime: Int = 0
-    
     @State private var calculationInfo: String = ""
     
     func calculateResults() -> String {
         var resultString = ""
-        let kcal = fatGrams * 9 + proteinGrams * 4
+        var digestionTime: Int = 0
+        let kcal = fatGrams * 9.0 + proteinGrams * 4.0
         
-        resultString.append("Total kcal: \(kcal)\n")
-        print("Total kcal: \(kcal)")
+        resultString.append("Total kcal: \(kcal.formatted(.number.precision(.fractionLength(1)))) \n")
         
         let fpus = kcal / 100.0
         let carbEquiv = fpus * 10.0
+        let insulinNeeded = carbEquiv / ICR
         
-        resultString.append("FPUs: \(fpus) \n")
-        resultString.append("Carb equivalent: \(carbEquiv) \n")
-        
-        recommendedInsulin = carbEquiv / ICR
-        
-        let insulinStr = recommendedInsulin.formatted(.number.precision(.fractionLength(2)))
-        
-        resultString.append("Recommended Insulin: \(insulinStr) \n")
+        resultString.append("FPUs: \(fpus.formatted(.number.precision(.fractionLength(2)))) \n")
+        resultString.append("Carb equivalent: \(carbEquiv.formatted(.number.precision(.fractionLength(1)))) g \n\n")
+        resultString.append("Recommended Insulin: \(insulinNeeded.formatted(.number.precision(.fractionLength(2)))) units \n")
         
         switch fpus {
         case -1..<2:
@@ -49,7 +42,7 @@ struct ContentView: View {
             digestionTime = 8
         }
         
-        resultString.append("Recommended extended bolus duration: \(digestionTime)")
+        resultString.append("Recommended extended bolus duration: \(digestionTime) hours")
         
         return resultString
     }
@@ -80,16 +73,15 @@ struct ContentView: View {
             }.padding(.leading)
                 .textFieldStyle(.roundedBorder)
                 
-            
             Button("Calculate") {
                 calculationInfo = calculateResults()
             }
             .padding()
             
-            
             Text(calculationInfo)
                 .multilineTextAlignment(.center)
                 .padding()
+            Spacer()
         }
     }
 }
