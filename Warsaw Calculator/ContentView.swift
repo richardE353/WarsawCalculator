@@ -42,7 +42,7 @@ struct ContentView: View {
             digestionTime = 8
         }
         
-        resultString.append("Recommended extended bolus duration: \(digestionTime) hours")
+        resultString.append("Recommended bolus duration: \(digestionTime) hrs")
         
         return resultString
     }
