@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var ICR: Double = 10.0
     
     @State private var calculationInfo: String = ""
+    @FocusState private var isInputActive: Bool
     
     func calculateResults() -> String {
         var resultString = ""
@@ -55,6 +56,7 @@ struct ContentView: View {
                 Text("Fat (g):")
                 TextField("", value: $fatGrams, format: .number)
                     .keyboardType(.decimalPad)
+                    .focused($isInputActive)
                 Spacer()
             }.padding(.leading)
                 .textFieldStyle(.roundedBorder)
@@ -62,6 +64,7 @@ struct ContentView: View {
                 Text("Protein (g):")
                 TextField("", value: $proteinGrams, format: .number)
                     .keyboardType(.decimalPad)
+                    .focused($isInputActive)
                 Spacer()
             }.padding(.leading)
                 .textFieldStyle(.roundedBorder)
@@ -69,11 +72,13 @@ struct ContentView: View {
                 Text("Insulin to Carb Ratio:")
                 TextField("", value: $ICR, format: .number)
                     .keyboardType(.decimalPad)
+                    .focused($isInputActive)
                 Spacer()
             }.padding(.leading)
                 .textFieldStyle(.roundedBorder)
                 
             Button("Calculate") {
+                isInputActive = false
                 calculationInfo = calculateResults()
             }
             .padding()
